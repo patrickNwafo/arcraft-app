@@ -17,6 +17,40 @@ const navigationMenu = [
 
 const Navigation = () => {
     const [open, setOpen] = useState(false);
+
+    const pathname = usePathname();
+
+    let newPathname = '';
+
+    let wHeight = null;
+    let wWidth = null;
+    if (typeof window !== "undefined") {
+        wHeight = window.innerHeight;
+        wWidth = window.innerWidth;
+    }
+    const [dimensions, setDimensions] = useState({
+        height: wHeight,
+        width: wWidth,
+    })
+
+    useEffect(() => {
+        function handleResize() {
+            setDimensions({
+                height: window.innerHeight,
+                width: window.innerWidth,
+            });
+            if (dimensions.width > 768 && open) {
+                setOpen(false);
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+
+        return (_) => {
+            window.removeEventListener('resize', handleResize);
+        }
+    });
+
     return (
         <>
             <header role='banner' className='py-10 absolute w-full z-[3]'>
@@ -31,7 +65,7 @@ const Navigation = () => {
                             </li>
                         ))}</ul>
 
-                        <button className='md:hidden text-md'>Menu</button>
+                        <button className='md:hidden text-md' onClick={() => setOpen(true)}>Menu</button>
                     </div>
                 </div>
 
@@ -63,13 +97,38 @@ const Navigation = () => {
                                                     <Dialog.Title className="text-lg font-medium text-gray-900">
                                                         Menu
                                                     </Dialog.Title>
+                                                    <div className='ml-3 flex h-7 items-center'>
+                                                        <button
+                                                            type='button'
+                                                            className='relative -m-2 p-2 text-gray-400 hover:text-gray-500'
+                                                            onClick={() => setOpen(false)}
+                                                        > <span className='absolute -inset-0.5' />
+                                                            <span className='sr-only'>Close panel</span>
+                                                            <XMarkIcon className='h-6 w-6'
+                                                                aria-hidden="true"
+                                                            />
+
+                                                        </button>
+                                                    </div>
                                                 </div>
 
-                                                <div></div>
+                                                <div className='mt-8'>
+                                                    <div className='flow-root'>
+                                                        <ul role="list">
+                                                            {navigationMenu.map((menu, idx) => (
+                                                                <li key={menu.label}>
+                                                                    <Link href={menu.href} className='py-2 inline-block'>{menu.label}</Link>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                </div>
 
                                             </div>
 
-                                            <div></div>
+                                            <div className='border-t border-gray-200 px-4 py-6 sm:px-6'>
+                                                <div><Link href="/contact" className='block text-center text-[11.5px] tracking-[2px] font-bold uppercase bg-violet-600 py-4 px-5 text-white'>Contact us now</Link></div>
+                                            </div>
                                         </div>
                                     </Dialog.Panel>
                                 </Transition.Child>
