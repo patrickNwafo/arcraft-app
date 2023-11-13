@@ -76,10 +76,10 @@ const WhyUs = ({ className }) => {
                     <div className="lg:w-8/12 lg:flex gap-20 items-start">
                         <div className="mb-7 lg:mb-0 lg:w-6/12 lg:order-2">
                             <motion.div
-                                initial={{ opacity: 0, y: 10 }}
+                                initial={{ opacity: 0, x: 10 }}
                                 whileInView={{
                                     opacity: 1,
-                                    y: 0,
+                                    x: 0,
                                     transition: {
                                         delay: 0.6,
                                         duration: 0.5
